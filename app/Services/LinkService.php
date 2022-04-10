@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-
 use App\Models\Link;
 use Hashids\Hashids;
 
@@ -47,6 +46,7 @@ class LinkService
     private function createNewCode(): string
     {
         $codeLength = config('constants.link_code_length', 6);
+
         $hashids = new Hashids('', $codeLength);
         $maxLinkId = Link::query()->max('id') ?? 0;
         return $hashids->encode($maxLinkId + 1);

@@ -3,17 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LinkCreateRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\LinkRedirectRequest;
+use App\Services\LinkService;
+use Illuminate\Http\RedirectResponse;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class LinkController extends Controller
 {
-    public function show()
+    /**
+     * @throws UnknownProperties
+     */
+    public function show(LinkRedirectRequest $request, LinkService $service): RedirectResponse
     {
-
+        $dto = $request->getDTO();
+        $url = $service->getUrlByCode($dto->code);
+        return redirect()->away($url);
     }
 
-    public function store(LinkCreateRequest $request)
+    /**
+     * @throws UnknownProperties
+     */
+    public function store(LinkCreateRequest $request, LinkService $service): string
     {
-
+        $dto = $request->getDTO();
+        return url()->full() . '/' . $service->storeLink($dto->url);
     }
 }

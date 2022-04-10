@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use JetBrains\PhpStorm\ArrayShape;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
-class LinkCreateRequest extends FormRequest
+class LinkRedirectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +24,12 @@ class LinkCreateRequest extends FormRequest
      *
      * @return array
      */
-    #[ArrayShape(['url' => "string[]"])]
+    #[ArrayShape(['code' => "string[]"])]
     public function rules(): array
     {
         return [
-            'url' => [
-                'required',
-                'url'
+            'code' => [
+                'required'
             ],
         ];
     }

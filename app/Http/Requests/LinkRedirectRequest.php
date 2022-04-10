@@ -28,9 +28,7 @@ class LinkRedirectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'code' => [
-                'required'
-            ],
+
         ];
     }
 
@@ -39,6 +37,6 @@ class LinkRedirectRequest extends FormRequest
      */
     public function getDTO(): LinkDTO
     {
-        return new LinkDTO($this->all());
+        return new LinkDTO(['code' => $this->route('code')]);
     }
 }

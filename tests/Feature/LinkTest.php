@@ -33,7 +33,7 @@ class LinkTest extends TestCase
         $response = $this->post(route('link.store'), ['url' => $url]);
         $code = $response->getContent();
 
-        $response = $this->get(route('link.show', ['code', $code]));
+        $response = $this->get('/api/' . $code);
         $response->assertRedirect();
     }
 }

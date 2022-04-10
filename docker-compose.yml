@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+  nginx:
+    image: nginx:1.21.6-alpine
+    restart: unless-stopped
+    container_name: laravel-nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./docker/nginx/vol:/var/log/nginx/
+  db:
+    image: mysql:8.0.28
+    restart: unless-stopped
+    container_name: laravel-db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/vol:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      LANG: en_US.UTF-8
+      LANGUAGE: en_US:en
+      LC_ALL: en_US.UTF-8
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+  app:
+    build:
+      args:
+        user: user1
+        uid: 1000
+      context: ./
+      dockerfile: ./docker/php-fpm/Dockerfile
+    restart: unless-stopped
+    container_name: laravel-app
+    volumes:
+      - ./:/var/www
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/conf.d/extend-php.ini
+    depends_on:
+      - db
+  node:
+      image: node:16.14.0
+      container_name: laravel_node
+      tty: true
+      volumes:
+        - ./:/var/www

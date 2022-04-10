@@ -26,6 +26,6 @@ class LinkController extends Controller
     public function store(LinkCreateRequest $request, LinkService $service): string
     {
         $dto = $request->getDTO();
-        return url()->full() . '/' . $service->storeLink($dto->url);
+        return url()->full() . '/api/' . $service->storeLink($dto->url);
     }
 }
